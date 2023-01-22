@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User table</title>
+</head>
+<body>
+<table class="table table-dark">
+    <thead>
+
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">Surname</th>
+        <th scope="col">Age</th>
+        <th scope="col">Username</th>
+    </tr>
+
+    </thead>
+
+    <tbody>
+    <tr th:each="user: ${users}">
+        <td th:text="${user.getId()}"></td>
+        <td th:text="${user.getFirstName()}"></td>
+        <td th:text="${user.getSurname()}"></td>
+        <td th:text="${user.getAge()}"></td>
+        <td th:text="${user.getUsername()}"></td>
+        <td>
+            <form th:method="GET" th:action="@{/{id}/edit (id=${user.getId()})}">
+                <input type="submit" value="Update">
+            </form>
+        </td>
+        <td>
+            <form th:method="DELETE" th:action="@{/{id}(id=${user.getId()})}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+<a href="/new">Create new User</a>
+</body>
+</html>
