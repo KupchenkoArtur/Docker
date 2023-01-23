@@ -14,7 +14,7 @@ public class Role implements GrantedAuthority {
 
     @Column
     private String role;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_user_id")
     private User owner;
 
@@ -61,6 +61,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return null;
+        return getRole();
     }
 }

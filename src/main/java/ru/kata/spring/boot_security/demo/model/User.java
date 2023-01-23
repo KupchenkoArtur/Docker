@@ -2,6 +2,9 @@ package ru.kata.spring.boot_security.demo.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -11,17 +14,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private int id;
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2,max = 100,message = "Имя должно быть от 2 до 100 символов длиной")
     @Column(name = "firstname")
     private String firstName;
+    @NotEmpty(message = "Фамилия не должна быть пустой")
+    @Size(min = 2,max = 100,message = "Фамилия должна быть от 2 до 100 символов длиной")
     @Column
     private String surname;
     @Column
+    @Min(value = 1,message = "Возраст не должен быть, меньше нуля")
     private int age;
+    @NotEmpty(message = "Username не должнен быть пустой")
     @Column
     private String username;
     @Column
     private String password;
     @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @Column(name = "role")
     private List<Role> roleList;
 
 
@@ -103,6 +113,7 @@ public class User {
                 ", age=" + age +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", roleList=" + roleList +
                 '}';
     }
 }
