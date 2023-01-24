@@ -1,6 +1,9 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -15,39 +18,43 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private int id;
     @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2,max = 100,message = "Имя должно быть от 2 до 100 символов длиной")
+    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
     @Column(name = "firstname")
     private String firstName;
     @NotEmpty(message = "Фамилия не должна быть пустой")
-    @Size(min = 2,max = 100,message = "Фамилия должна быть от 2 до 100 символов длиной")
+    @Size(min = 2, max = 100, message = "Фамилия должна быть от 2 до 100 символов длиной")
     @Column
     private String surname;
     @Column
-    @Min(value = 1,message = "Возраст не должен быть, меньше нуля")
+    @Min(value = 1, message = "Возраст не должен быть, меньше нуля")
     private int age;
     @NotEmpty(message = "Username не должнен быть пустой")
     @Column
     private String username;
     @Column
     private String password;
-    @OneToMany(mappedBy = "owner",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @Column(name = "role")
+    @Fetch(FetchMode.JOIN)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "User_Role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private List<Role> roleList;
 
 
-    public User(String firstName, String surname, int age, String username, String password, List<Role> roleList) {
+    public User(String firstName, String surname, int age, String username, String password) {
         this.firstName = firstName;
         this.surname = surname;
         this.age = age;
         this.username = username;
         this.password = password;
-        this.roleList = roleList;
+
     }
 
     public User() {
 
     }
-
     public int getId() {
         return id;
     }

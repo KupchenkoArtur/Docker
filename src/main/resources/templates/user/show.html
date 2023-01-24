@@ -13,6 +13,7 @@
     <th scope="col">Surname</th>
     <th scope="col">Age</th>
     <th scope="col">Username</th>
+    <th scope="row">Role</th>
   </tr>
   </thead>
   <tbody>
@@ -22,6 +23,10 @@
     <td th:text="${user.getSurname()}"/>
     <td th:text="${user.getAge()}"/>
     <td th:text="${user.getUsername()}"/>
+    <td th:switch="${#lists.size(user.getRoleList())}">
+      <span th:case="'1'" th:text="${user.getRoleList().get(0).getRole().toLowerCase()}"></span>
+      <span th:case="'2'" th:text="${user.getRoleList().get(0).getRole().toLowerCase()+' '+user.getRoleList().get(1).getRole().toLowerCase()}"></span>
+    </td>
   </tr>
   </tbody>
 </table>

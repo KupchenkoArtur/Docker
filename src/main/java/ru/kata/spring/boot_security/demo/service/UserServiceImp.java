@@ -1,7 +1,7 @@
 package ru.kata.spring.boot_security.demo.service;
 
 
-
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -20,8 +20,13 @@ public class UserServiceImp implements UserService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> showAll() {
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            Hibernate.initialize(user);
+        }
+        return users;
     }
 
     @Override
@@ -32,7 +37,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User show(int id) {
-        return userRepository.findById(id).get();
+        User user = userRepository.findById(id).get();
+        return user;
     }
 
     @Override
@@ -43,9 +49,9 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void update(int id ,User user) {
+    public void update(int id, User user) {
         user.setId(id);
-       userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override

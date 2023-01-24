@@ -11,12 +11,10 @@ import ru.kata.spring.boot_security.demo.service.UserDetailsServiceImpl;
 
 @Component
 public class UserValidator implements Validator {
-    private  final UserDetailsServiceImpl userDetailsService;
     private final UserRepository userRepository;
 
     @Autowired
-    public UserValidator(UserDetailsServiceImpl userDetailsService, UserRepository userRepository) {
-        this.userDetailsService = userDetailsService;
+    public UserValidator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -28,12 +26,11 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        User user= (User) o;
+        User user = (User) o;
 
-        if (userRepository.findByUsername(user.getUsername()).isPresent()){
-            errors.rejectValue("username","","Человек с таким именем пользователя существует");
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            errors.rejectValue("username", "", "Человек с таким именем пользователя существует");
         }
-
 
 
     }

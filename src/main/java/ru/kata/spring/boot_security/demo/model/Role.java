@@ -1,8 +1,9 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import org.springframework.security.core.GrantedAuthority;
 
+import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
+
 
 @Entity
 @Table(name = "role")
@@ -14,13 +15,9 @@ public class Role implements GrantedAuthority {
 
     @Column
     private String role;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_user_id")
-    private User owner;
 
-    public Role(String role, User owner) {
+    public Role(String role) {
         this.role = role;
-        this.owner = owner;
     }
 
     public Role() {
@@ -42,25 +39,9 @@ public class Role implements GrantedAuthority {
         this.role = role;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", role='" + role + '\'' +
-                ", owner=" + owner +
-                '}';
-    }
-
     @Override
     public String getAuthority() {
         return getRole();
     }
+
 }
