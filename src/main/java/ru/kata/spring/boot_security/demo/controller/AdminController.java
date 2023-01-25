@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -9,9 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.role.RoleService;
+import ru.kata.spring.boot_security.demo.service.user.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
@@ -21,18 +19,16 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final UserValidator userValidator;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
+
 
     @Autowired
-    public AdminController(PasswordEncoder passwordEncoder, UserService userService, UserValidator userValidator,
-                           RoleRepository roleRepository) {
-        this.passwordEncoder = passwordEncoder;
+    public AdminController(UserService userService, UserValidator userValidator, RoleService roleService) {
         this.userService = userService;
         this.userValidator = userValidator;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
 
@@ -53,7 +49,6 @@ public class AdminController {
         if (bindingResult.hasErrors())
             return "admin/newUser";
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.create(user);
 
         return "redirect:/admin";
@@ -86,7 +81,7 @@ public class AdminController {
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("user") User user, Model model) {
 
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.showAll());
 
         return "admin/newUser";
     }
@@ -96,7 +91,7 @@ public class AdminController {
     public String edit(Model model, @PathVariable("id") int id) {
 
         model.addAttribute("user", userService.show(id));
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("roles", roleService.showAll());
 
         return "admin/edit";
     }

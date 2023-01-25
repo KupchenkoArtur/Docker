@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.service;
+package ru.kata.spring.boot_security.demo.service.user;
 
 import ru.kata.spring.boot_security.demo.model.User;
 
