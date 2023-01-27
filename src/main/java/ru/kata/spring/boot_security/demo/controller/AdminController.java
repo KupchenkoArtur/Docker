@@ -13,7 +13,9 @@ import ru.kata.spring.boot_security.demo.service.user.UserService;
 import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -33,10 +35,12 @@ public class AdminController {
 
 
     @GetMapping
-    public String printWelcome(ModelMap model) {
-
+    public String printWelcome(ModelMap model, Principal principal) {
+        Optional<User> user =userService.findByUserName(principal.getName());
         List<User> users = userService.showAll();
+
         model.addAttribute("users", users);
+        model.addAttribute("principal",user.get());
 
         return "admin/index";
     }

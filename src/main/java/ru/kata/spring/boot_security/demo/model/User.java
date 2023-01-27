@@ -126,6 +126,7 @@ public class User implements UserDetails {
                 ", roleList=" + roleList +
                 '}';
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roleList;
