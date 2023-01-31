@@ -21,7 +21,7 @@
                     <a th:text="*{principal.getUsername()}" class="font-weight-bold text-white" id="headerUsername"></a>
                     <a> with roles:</a>
                     <a th:switch="${#lists.size(principal.getRoleList())}">
-                        <span th:case="'1'" th:text="${user.getRoleList().get(0).getRole().toLowerCase()}"></span>
+                        <span th:case="'1'" th:text="${principal.getRoleList().get(0).getRole().toLowerCase()}"></span>
                         <span th:case="'2'"
                               th:text="${principal.getRoleList().get(0).toString()+' '+principal.getRoleList().get(1).toString()}"></span></a>
                     <a th:href="@{/logout}" class="float-right text-secondary"> Logout </a>
@@ -38,7 +38,6 @@
                     Admin
                 </a>
                 <a href="/user" class="list-group-item list-group-item-action active">User</a>
-
 
             </div>
         </div>
@@ -72,16 +71,6 @@
                               th:text="${user.getRoleList().get(0).getRole().toLowerCase()+' '+user.getRoleList().get(1).getRole().toLowerCase()}"></span>
                     </td>
 
-                    <td>
-                        <form th:method="GET" th:action="@{/admin/{id}/edit (id=${user.getId()})}">
-                            <input type="submit" value="Update">
-                        </form>
-                    </td>
-                    <td>
-                        <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
-                            <input type="submit" value="Delete"/>
-                        </form>
-                    </td>
                 </tr>
 
                 </tbody>
@@ -89,7 +78,6 @@
             </table>
         </div>
     </div>
-
-
+</div>
 </body>
 </html>

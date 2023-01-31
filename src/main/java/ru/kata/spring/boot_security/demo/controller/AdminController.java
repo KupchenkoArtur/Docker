@@ -41,17 +41,14 @@ public class AdminController {
 
         model.addAttribute("users", users);
         model.addAttribute("principal",user.get());
+        model.addAttribute("newUser",new User());
+        model.addAttribute("roles", roleService.showAll());
 
         return "admin/index";
     }
 
     @PostMapping
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-
-        userValidator.validate(user, bindingResult);
-
-        if (bindingResult.hasErrors())
-            return "admin/newUser";
+    public String create(@ModelAttribute("newUser") User user) {
 
         userService.create(user);
 
@@ -67,16 +64,8 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("user") @Valid User user,
-                         BindingResult bindingResult) {
-
+    public String update(@PathVariable("id") int id, @ModelAttribute("user") User user) {
         user.setPassword(userService.show(id).getPassword());
-
-        if (bindingResult.hasErrors()) {
-            System.out.println(bindingResult);
-            return "/admin/edit";
-        }
-
         userService.update(id, user);
 
         return "redirect:/admin";

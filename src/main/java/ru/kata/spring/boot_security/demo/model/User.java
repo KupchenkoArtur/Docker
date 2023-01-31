@@ -20,18 +20,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private int id;
-    @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длиной")
+
     @Column(name = "firstname")
     private String firstName;
-    @NotEmpty(message = "Фамилия не должна быть пустой")
-    @Size(min = 2, max = 100, message = "Фамилия должна быть от 2 до 100 символов длиной")
     @Column
     private String surname;
     @Column
-    @Min(value = 1, message = "Возраст не должен быть, меньше нуля")
     private int age;
-    @NotEmpty(message = "Username не должнен быть пустой")
+
     @Column
     private String username;
     @Column
