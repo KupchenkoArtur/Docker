@@ -7,6 +7,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.role.RoleService;
 import ru.kata.spring.boot_security.demo.service.user.UserService;
@@ -14,6 +15,7 @@ import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +50,13 @@ public class AdminController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("newUser") User user) {
+    public String create(@ModelAttribute("newUser") User user,@RequestParam("roles") int[] rolesId) {
+        List<Role> roles=new ArrayList<>();
+
+        for (int role:rolesId) {
+            roles.add(roleService.show(role));
+        }
+        user.setRoleList(roles);
 
         userService.create(user);
 
@@ -64,8 +72,16 @@ public class AdminController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("user") User user) {
+    public String update(@PathVariable("id") int id, @ModelAttribute("user") User user,@RequestParam("roles") int[] rolesId) {
+        List<Role> roles=new ArrayList<>();
+
+        for (int role:rolesId) {
+            roles.add(roleService.show(role));
+        }
+
         user.setPassword(userService.show(id).getPassword());
+        user.setRoleList(roles);
+
         userService.update(id, user);
 
         return "redirect:/admin";

@@ -86,9 +86,9 @@
                                         <td th:text="${user.getUsername()}"></td>
                                         <td th:switch="${#lists.size(user.getRoleList())}">
                                             <span th:case="'1'"
-                                                  th:text="${user.getRoleList().get(0).getRole().toLowerCase()}"></span>
+                                                  th:text="${user.getRoleList().get(0).toString()}"></span>
                                             <span th:case="'2'"
-                                                  th:text="${user.getRoleList().get(0).getRole().toLowerCase()+' '+ user.getRoleList().get(1).getRole().toLowerCase()}"></span>
+                                                  th:text="${user.getRoleList().get(0).toString()+', '+ user.getRoleList().get(1).toString()}"></span>
                                         </td>
 
                                         <td>
@@ -154,14 +154,14 @@
                                                                     required>
                                                                 <option th:each="role:${roles}" th:value="${role.id}"
                                                                         th:selected="${user.roleList.contains(role)}">
-                                                                    <th:block th:text="${role.role}">
+                                                                    <th:block th:text="${role.toString()}">
                                                                     </th:block>
                                                                 </option>
                                                             </select>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close
+                                                                    data-dismiss="modal">Close
                                                             </button>
                                                             <button type="submit" class="btn btn-primary">
                                                                 Edit
@@ -192,33 +192,33 @@
                                                             <label for="firstNameDel"><b>First Name</b></label>
                                                             <input th:name="firstName" th:type="text"
                                                                    class="form-control" id="firstNameDel"
-                                                                   th:value="${user.firstName}"/>
+                                                                   th:value="${user.firstName}" disabled/>
                                                             <br>
                                                             <label for="lastNameDel"><b>Last Name</b></label>
                                                             <input th:name="surname" th:type="text"
                                                                    class="form-control" id="lastNameDel"
-                                                                   th:value="${user.surname}"/>
+                                                                   th:value="${user.surname}" disabled/>
                                                             <br>
                                                             <label for="ageDel"><b>Age</b></label>
                                                             <input th:name="age" th:type="number"
                                                                    class="form-control" id="ageDel"
-                                                                   th:value="${user.age}"/>
+                                                                   th:value="${user.age}" disabled/>
                                                             <br>
                                                             <label for="usernameDel"><b>Email</b></label>
                                                             <input th:name="username" th:type="text"
                                                                    class="form-control" id="usernameDel"
-                                                                   th:value="${user.username}"/>
+                                                                   th:value="${user.username}" disabled/>
                                                             <br>
                                                             <label for="passwordDel"><b>Password</b></label>
                                                             <input th:name="password" type="text"
                                                                    class="form-control" id="passwordDel"
-                                                                   value=""/>
+                                                                   value="" disabled/>
                                                             <br>
                                                             <label for="roleListDel"><b>Role</b></label>
                                                             <select multiple class="form-control form-control-sm"
                                                                     id="roleListDel" name="roles"
                                                                     th:size="${roles.size()}"
-                                                                    required>
+                                                                    required disabled>
                                                                 <option th:each="role:${roles}"
                                                                         th:value="${role.getRole()}"
                                                                         th:selected="${user.roleList.contains(role)}">
@@ -229,7 +229,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">Close
+                                                                    data-dismiss="modal">Close
                                                             </button>
                                                             <button type="submit" class="btn btn-primary">
                                                                 Delete
@@ -284,7 +284,8 @@
 
                                         <div class="form-group">
                                             <label class="font-weight-bold" for="rolesNew">Role</label>
-                                            <select class="custom-select form-control" id="rolesNew" name="roles" multiple
+                                            <select class="custom-select form-control" id="rolesNew" name="roles"
+                                                    multiple
                                                     size="2">
                                                 <option th:each="role : ${roles}"
                                                         th:value="${role.id}"
@@ -304,6 +305,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

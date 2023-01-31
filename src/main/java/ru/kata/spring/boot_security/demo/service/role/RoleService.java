@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RoleService {
     List<Role> showAll();
+    Role show(int id);
 }
