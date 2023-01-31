@@ -4,16 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.*;
 
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.service.role.RoleService;
 import ru.kata.spring.boot_security.demo.service.user.UserService;
-import ru.kata.spring.boot_security.demo.util.UserValidator;
-
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +22,12 @@ import java.util.Optional;
 public class AdminController {
 
     private final UserService userService;
-    private final UserValidator userValidator;
     private final RoleService roleService;
 
 
     @Autowired
-    public AdminController(UserService userService, UserValidator userValidator, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
-        this.userValidator = userValidator;
         this.roleService = roleService;
     }
 
@@ -63,10 +59,11 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    @GetMapping("/show")
+    public String show( Principal principal,Model model) {
+        Optional<User> user =userService.findByUserName(principal.getName());
 
-        model.addAttribute("user", userService.show(id));
+        model.addAttribute("principal",user.get());
 
         return "admin/show";
     }
@@ -86,25 +83,6 @@ public class AdminController {
 
         return "redirect:/admin";
     }
-
-    @GetMapping("/new")
-    public String newPerson(@ModelAttribute("user") User user, Model model) {
-
-        model.addAttribute("roles", roleService.showAll());
-
-        return "admin/newUser";
-    }
-
-
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id) {
-
-        model.addAttribute("user", userService.show(id));
-        model.addAttribute("roles", roleService.showAll());
-
-        return "admin/edit";
-    }
-
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
 
