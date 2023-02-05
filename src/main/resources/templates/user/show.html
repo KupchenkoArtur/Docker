@@ -17,13 +17,7 @@
     <div class="col-12">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-12 p-2 bg-dark text-white ">
-                    <a th:text="*{principal.getUsername()}" class="font-weight-bold text-white" id="headerUsername"></a>
-                    <a> with roles:</a>
-                    <a th:switch="${#lists.size(principal.getRoleList())}">
-                        <span th:case="'1'" th:text="${principal.getRoleList().get(0).getRole().toLowerCase()}"></span>
-                        <span th:case="'2'"
-                              th:text="${principal.getRoleList().get(0).toString()+' '+principal.getRoleList().get(1).toString()}"></span></a>
+                <div class="col-sm-12 p-2 bg-dark text-white " id="headerUsername">
                     <a th:href="@{/logout}" class="float-right text-secondary"> Logout </a>
                 </div>
             </div>
@@ -89,5 +83,6 @@
         </div>
     </div>
 </div>
+
 </body>
 </html>

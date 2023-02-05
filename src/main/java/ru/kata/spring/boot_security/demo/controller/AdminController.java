@@ -42,7 +42,7 @@ public class AdminController {
         model.addAttribute("newUser",new User());
         model.addAttribute("roles", roleService.showAll());
 
-        return "admin/index";
+        return "admin/a";
     }
 
     @PostMapping

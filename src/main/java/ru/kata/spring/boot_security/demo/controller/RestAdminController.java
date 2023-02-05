@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/admin1")
+@RequestMapping("/api")
 public class RestAdminController {
     private final UserService userService;
     private final RoleService roleService;
@@ -41,12 +41,15 @@ public class RestAdminController {
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
     @GetMapping("/principal")
-    public ResponseEntity<User> getPrincipal(Principal principal) {
+    public  User getPrincipal(Principal principal) {
 
         Optional<User> user = userService.findByUserName(principal.getName());
 
-        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        System.out.println(user.get());
+
+        return user.get();
 
     }
 
