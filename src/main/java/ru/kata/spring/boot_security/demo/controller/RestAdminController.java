@@ -6,10 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.service.role.RoleService;
 import ru.kata.spring.boot_security.demo.service.user.UserService;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -18,10 +21,12 @@ public class RestAdminController {
     private final UserService userService;
     private final RoleService roleService;
 
+
     @Autowired
     public RestAdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
+
     }
 
 
@@ -36,6 +41,16 @@ public class RestAdminController {
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+    @GetMapping("/principal")
+    public ResponseEntity<User> getPrincipal(Principal principal) {
+
+        Optional<User> user = userService.findByUserName(principal.getName());
+
+        return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+    }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
