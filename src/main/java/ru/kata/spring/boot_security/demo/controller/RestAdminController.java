@@ -5,7 +5,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.role.RoleService;
 import ru.kata.spring.boot_security.demo.service.user.UserService;
 
 import java.security.Principal;
@@ -17,10 +19,12 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class RestAdminController {
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public RestAdminController(UserService userService) {
+    public RestAdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
 
@@ -89,6 +93,15 @@ public class RestAdminController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @GetMapping("/roles")
+    public  ResponseEntity<List<Role>> gerAllRoles(){
+        List<Role> roles = roleService.showAll();
 
+        if (roles.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(roles, HttpStatus.OK);
+    }
 
 }

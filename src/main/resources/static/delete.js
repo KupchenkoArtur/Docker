@@ -1,6 +1,8 @@
 async function deleteUserData(id) {
 
+    let dbRoles=showAllRole();
     let href = `http://localhost:8080/api/${id}`
+
         $.get(href, function (user) {
             $('.myDeleteForm #dId').val(user.id);
             $('.myDeleteForm #dFirstname').val(user.firstname);
@@ -11,8 +13,8 @@ async function deleteUserData(id) {
 
 
             inputRoles.innerHTML = `
-        <option value="${dbRoles[0].id}" name="ROLE_ADMIN" >${dbRoles[0].name}</option>
-        <option value="${dbRoles[1].id}" name="ROLE_USER" >${dbRoles[1].name}</option>
+        <option value="${dbRoles[0].id}" name="ROLE_USER" >${dbRoles[0].role}</option>
+        <option value="${dbRoles[1].id}" name="ROLE_ADMIN" >${dbRoles[1].role}</option>
         `
         })
 

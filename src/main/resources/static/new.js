@@ -1,19 +1,18 @@
-const dbRoles = [{id: 2, name: "ROLE_ADMIN"}, {id: 1, name: "ROLE_USER"}];
-
+async function showAllRole() {
+    let roles = await fetch("http://localhost:8080/api/roles");
+    return roles.json();
+}
 
 async function showRole() {
 
     const inputRoles = document.getElementById('nRoles');
 
-
+    let dbRoles = await showAllRole()
     inputRoles.innerHTML = `
-        <option value="${dbRoles[0].id}" name="ROLE_ADMIN" >${dbRoles[0].name}</option>
-        <option value="${dbRoles[1].id}" name="ROLE_USER" >${dbRoles[1].name}</option>
+        <option value="${dbRoles[0].id}"  >${dbRoles[0].role}</option>
+        <option value="${dbRoles[1].id}"  >${dbRoles[1].role}</option>
         `
 }
-
-
-
 
 
 document.getElementById('profile-tab').addEventListener('click', showRole)
@@ -26,15 +25,15 @@ async function createUser() {
     const inputAge = document.getElementById('nAge');
     const inputUsername = document.getElementById('nUsername');
     const inputPassword = document.getElementById('nPassword');
-    
 
-    const firstName= inputFirstName.value;
+
+    const firstName = inputFirstName.value;
     const surname = inputSurname.value;
     const age = inputAge.value;
     const username = inputUsername.value;
     const password = inputPassword.value;
     let listRoles = roleArray(document.getElementById('nRoles'));
-   
+
 
     if (firstName && surname && age && username && password && (listRoles.length !== 0)) {
 
@@ -43,30 +42,44 @@ async function createUser() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ firstName, surname, age, username, password, roleList: listRoles })
+            body: JSON.stringify({firstName, surname, age, username, password, roleList: listRoles})
         });
         const result = await res.json();
         await addUserInTable(result);
     }
 
-        inputFirstName.value = ''
-        inputSurname.value = ''
-        inputAge.value = ''
-        inputUsername.value =''
-        inputPassword.value = ''
+    inputFirstName.value = ''
+    inputSurname.value = ''
+    inputAge.value = ''
+    inputUsername.value = ''
+    inputPassword.value = ''
 
 }
 
 
-
-
-let roleArray = (options) => {
-    let array =[]
+// let roleArray = (options) => {
+//     let dbRoles = showAllRole();
+//     let array = []
+//     for (let i = 0; i < options.length; i++) {
+//         if (options[i].selected) {
+//             let role = {
+//                 id: options[i].value,
+//                 role: dbRoles[i].role
+//             }
+//
+//             array.push(role)
+//         }
+//     }
+//     return array
+// }
+async function roleArray(options) {
+    let dbRoles = await showAllRole();
+    let array = []
     for (let i = 0; i < options.length; i++) {
         if (options[i].selected) {
             let role = {
                 id: options[i].value,
-                role: dbRoles[i].name
+                role: dbRoles[i].role
             }
 
             array.push(role)
@@ -87,8 +100,6 @@ async function addUserInTable(result) {
     user.roleList.forEach((role) => {
         strRoles += role.role.substring(5) + ' ';
     })
-
-
 
 
     const tbody = document.getElementById('data');

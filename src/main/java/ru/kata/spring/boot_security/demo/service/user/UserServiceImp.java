@@ -16,14 +16,13 @@ import java.util.Optional;
 public class UserServiceImp implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+
 
     @Autowired
-    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                          RoleRepository roleRepository) {
+    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
+
     }
 
 
@@ -36,8 +35,6 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public void create(User user) {
-        System.out.println(roleRepository.findAll());
-        System.out.println(user+"user service create");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
