@@ -37,7 +37,7 @@ public class UserServiceImp implements UserService {
     @Transactional
     public void create(User user) {
         System.out.println(roleRepository.findAll());
-
+        System.out.println(user+"user service create");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -55,9 +55,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void update(int id, User user) {
-        user.setId(id);
-        userRepository.save(user);
+    public void update(User user) {
+        if (!user.getPassword().equals(show(user.getId()).getPassword())) {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            userRepository.saveAndFlush(user);
+
     }
 
     @Override

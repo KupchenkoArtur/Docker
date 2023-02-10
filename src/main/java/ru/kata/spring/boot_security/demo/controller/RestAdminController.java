@@ -6,8 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
-import ru.kata.spring.boot_security.demo.service.role.RoleService;
 import ru.kata.spring.boot_security.demo.service.user.UserService;
 
 import java.security.Principal;
@@ -19,14 +17,10 @@ import java.util.Optional;
 @RequestMapping("/api")
 public class RestAdminController {
     private final UserService userService;
-    private final RoleService roleService;
-
 
     @Autowired
-    public RestAdminController(UserService userService, RoleService roleService) {
+    public RestAdminController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
-
     }
 
 
@@ -47,13 +41,8 @@ public class RestAdminController {
 
         Optional<User> user = userService.findByUserName(principal.getName());
 
-        System.out.println(user.get());
-
         return user.get();
-
     }
-
-
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
@@ -65,7 +54,7 @@ public class RestAdminController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<User> saveUser(@RequestBody User user) {
         HttpHeaders httpHeaders = new HttpHeaders();
 
@@ -84,14 +73,13 @@ public class RestAdminController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        userService.create(user);
+        userService.update(user);
         return new ResponseEntity<>(user, httpHeaders, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser( @PathVariable("id") int id) {
         User user = userService.show(id);
-        System.out.println(user);
 
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
