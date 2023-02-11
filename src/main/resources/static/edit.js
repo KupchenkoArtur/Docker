@@ -2,7 +2,6 @@ async function editUserData(id) {
 
     let href = `http://localhost:8080/api/${id}`;
     let dbRoles = await showAllRole();
-
     $.get(href, function (user) {
         $('.myForm #id').val(user.id);
         $('.myForm #firstname').val(user.firstName);
@@ -34,7 +33,7 @@ async function editUserData(id) {
         const age = inputAge.value;
         const username = inputUsername.value;
         const password = inputPassword.value;
-        const listRoleEditUser = roleArray(document.getElementById('roles'))
+        const listRoleEditUser = await roleArray(document.getElementById('roles'))
 
         if (id && firstName && surname && age && username && password) {
             const res = await fetch("http://localhost:8080/api", {

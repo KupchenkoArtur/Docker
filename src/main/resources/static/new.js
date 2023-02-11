@@ -1,16 +1,22 @@
 async function showAllRole() {
+    let dbRoles = [];
     let roles = await fetch("http://localhost:8080/api/roles");
-    return roles.json();
+    await roles.json().then(roles => {
+        roles.forEach(role =>
+            dbRoles.push(role))
+    });
+    return dbRoles;
 }
 
 async function showRole() {
 
     const inputRoles = document.getElementById('nRoles');
 
-    let dbRoles = await showAllRole()
+    let Array = await showAllRole();
+    console.log(Array);
     inputRoles.innerHTML = `
-        <option value="${dbRoles[0].id}"  >${dbRoles[0].role}</option>
-        <option value="${dbRoles[1].id}"  >${dbRoles[1].role}</option>
+        <option value="${Array[0].id}">${Array[0].role}</option>
+        <option value="${Array[1].id}">${Array[1].role}</option>
         `
 }
 
@@ -32,7 +38,7 @@ async function createUser() {
     const age = inputAge.value;
     const username = inputUsername.value;
     const password = inputPassword.value;
-    let listRoles = roleArray(document.getElementById('nRoles'));
+    let listRoles = await roleArray(document.getElementById('nRoles'));
 
 
     if (firstName && surname && age && username && password && (listRoles.length !== 0)) {
@@ -58,7 +64,7 @@ async function createUser() {
 
 
 // let roleArray = (options) => {
-//     let dbRoles = showAllRole();
+//
 //     let array = []
 //     for (let i = 0; i < options.length; i++) {
 //         if (options[i].selected) {
